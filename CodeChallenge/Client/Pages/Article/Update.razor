@@ -1,0 +1,63 @@
+﻿@page "/Article/Update/{Id}"
+@using CodeChallenge.Shared
+@inject IJSRuntime js
+@inject NavigationManager NavManager
+
+<div class="m-20" >
+    <EditForm Model="article">
+        <div class="form-group">
+            <label>Title:</label>
+            <InputText @bind-Value="article.Title" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label>Description:</label>
+            <InputText @bind-Value="article.Description" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <label>Content:</label>
+            <InputTextArea @bind-Value="article.Content" class="form-control"></InputTextArea>
+        </div>
+
+        <div class="form-group">
+            <label>Content:</label>
+            <InputTextArea @bind-Value="@SourceName" class="form-control"></InputTextArea>
+        </div>
+
+        <div class="form-group">
+            <label>Image:</label>
+            <input type="hidden" id="idImage" @bind="article.Id" />
+            <input type='file' id="uploadImage" onchange="readURL(this);" />
+            <div class="article__hero">
+                <img id="bannerImg" src="data:image/png;base64,@article.Image" />
+            </div>
+        </div>
+        <input type="button" class="btn btn-primary" value="Save" @onclick="UpdateArt" />
+    </EditForm>
+</div>
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Article article = new Article();
+    string SourceName = "";
+    protected override async Task OnInitializedAsync()
+    {
+        article = await js.InvokeAsync<Article>("fnGetLocalId", Id);
+        SourceName = article.Source.Name;
+        Console.WriteLine(article.Source.Name);
+    }
+    private void UpdateArt()
+    {
+        article.PublishedAt = DateTime.Now;
+        Blog blog = new Blog()
+        {
+            Articles = new List<Article>() { this.article },
+            TotalArticles = 1
+        };
+        Console.WriteLine(blog);
+        js.InvokeVoidAsync("fnSaveLocal", blog,1);
+        NavManager.NavigateTo("/LocalArticle");
+
+    }
+
+}
+

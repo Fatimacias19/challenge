@@ -1,0 +1,43 @@
+﻿@page "/Article/Show/{Id}"
+@using CodeChallenge.Shared
+@inject IJSRuntime js
+
+<div id="maincontent" tabindex="-1" class="article-template article-template--standard article-template--default_article m-20">
+    <div><a class="btn btn-secondary" href="/Article/Update/@article.Id">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+    </svg>
+</a></div>
+    <div class="article-header-container article-header-container--image">
+        <div class="article-header">
+            <div class="article-hero imgix-fluid imgix-bg embed-img" data-src="@article.Image" data-width="500" data-height="900" style="background-image: url('data:image/png;base64,@article.Image');"></div>
+        </div>
+    </div>
+    <div class="article-title-meta">
+        <div class="title-dek-wrapper">
+            <h1 class="article-title"><span>@article.Title</span></h1>
+            <h2 class="article-dek"><p>@article.Description</p></h2>
+        </div>
+    </div>
+    <div class="article-content">
+        <div class="article-blocks">        
+            <div data-index="3">
+                <div class="body-copy">
+                    <p>@article.Content</p>
+                </div>
+            </div>  
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    Article article = new Article();
+    protected override async Task OnInitializedAsync()
+    {
+        var json = await js.InvokeAsync<Article>("fnGetLocalId", Id);
+        article = json;
+    } 
+}
