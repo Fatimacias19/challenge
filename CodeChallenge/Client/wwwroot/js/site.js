@@ -64,8 +64,7 @@ function Draw(data, type) {
         }
         let html1 = html.replace("@url", url1).replace("@Title", data[i].title).replace("@PublishedAt", data[i].publishedAt).replace("@Description", data[i].description).replace("@Content", data[i].content).replace("@SourceName", data[i]['source'].name);
         html1 = html1.replace("##Image", encodeURI(url2));
-        console.log(html1);
-        $("#container").append(html1);
+        $("#container").appsend(html1);
     }
     pageIndex++;
 }
@@ -88,7 +87,7 @@ function GetData(type,filter) {
                 $("#progress").hide();
             },
             error: function () {
-                alert("Error while retrieving data!");
+                //alert("Error while retrieving data!");
             }
         });
     }

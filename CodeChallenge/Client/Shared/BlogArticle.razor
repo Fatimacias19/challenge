@@ -108,7 +108,10 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await js.InvokeVoidAsync("renderInfiniteScrolling", Type,Filter);
+        if (Type == "External")
+        {
+            await js.InvokeVoidAsync("renderInfiniteScrolling", Type, Filter);
+        }
         await base.OnAfterRenderAsync(firstRender);
     }
 
